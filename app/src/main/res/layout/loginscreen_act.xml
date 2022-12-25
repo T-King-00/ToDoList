@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity"
+   >
+
+
+    <ImageView
+        android:layout_width="320sp"
+        android:layout_height="320sp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        app:srcCompat="@mipmap/ic_launchericon_foreground"
+        tools:srcCompat="@mipmap/ic_launchericon_foreground" />
+
+    <EditText
+        android:id="@+id/EmailAddressTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+
+        android:layout_marginBottom="10dp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:text="tony_shereen@outlook.com" />
+
+    <EditText
+        android:id="@+id/passwordTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+
+        android:layout_marginBottom="10dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:text="1234567" />
+
+    <Button
+        android:id="@+id/btnForgetPass"
+        android:onClick="forgetPass"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+
+        android:background="@drawable/transparentbackgroud"
+        android:gravity="right"
+        android:text="Forget Password?"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+
+
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btnSignin"
+        android:onClick="logIn"
+
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+
+        android:background="@drawable/backgroudforbuttons"
+        android:gravity="center"
+        android:text="Sign In"
+        android:textAllCaps="false"
+
+
+        android:textSize="18sp"
+        />
+
+    <Button
+        android:id="@+id/btnSignUp"
+        android:onClick="signUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/transparentbackgroud"
+
+        android:gravity="center"
+        android:text="New user ? SignUp"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/newTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+
+</LinearLayout>
