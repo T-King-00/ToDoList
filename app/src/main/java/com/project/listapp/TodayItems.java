@@ -1,6 +1,8 @@
 package com.project.listapp;
 
-import android.nfc.Tag;
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
+
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,26 +11,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-import com.project.listapp.MainActivity;
+import com.google.gson.Gson;
 
 import org.bson.Document;
-import org.bson.conversions.Bson;
-import org.bson.types.ObjectId;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import io.realm.mongodb.App;
+import io.realm.mongodb.AppConfiguration;
 import io.realm.mongodb.RealmResultTask;
+import io.realm.mongodb.User;
 import io.realm.mongodb.mongo.MongoClient;
 import io.realm.mongodb.mongo.MongoCollection;
 import io.realm.mongodb.mongo.MongoDatabase;
@@ -45,7 +46,8 @@ public class TodayItems extends Fragment {
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adpt;
-    ArrayList<Task> list;
+    static ArrayList<Task> list;
+    Semaphore sem=new Semaphore(0);
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,38 +64,65 @@ public class TodayItems extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         return view;
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        list.clear();
+        try {
+            getDataFromdb();
+         //   sem.acquire();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         MainActivity.thread.beginTransaction();
-        list.clear();
         RealmResults<Task> Tasks = MainActivity.thread.where(Task.class).findAll();
         long counter = MainActivity.thread.where(Task.class).findAll().stream().count();
-        for (int i=0;i<counter;i++) {
-            Task otherTask = Tasks.get(i);
-
-            Log.d(TAG, "onCreateView: " + otherTask.getTitle());
-
-            list.add(otherTask);
-        }
-        adpt=new Adapter(this.getContext(),list);
         MainActivity.thread.commitTransaction();
-
-
-        adpt.notifyDataSetChanged();
+        if (counter!=0) {
+            for (int i = 0; i < counter; i++) {
+                Task otherTask = Tasks.get(i);
+                //Log.d(TAG, "onCreateView: " + otherTask.getTitle());
+                list.add(otherTask);
+            }
+        }
+        adpt = new Adapter(this.getContext(), list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+    }
+
+    public void getDataFromdb() {
+
+        MongoClient monClient = MainActivity.monUser.getMongoClient("mongodb-atlas");
+        MongoDatabase monDb = monClient.getDatabase("ToDoListApp");
+        MongoCollection<Document> mongoCollection = monDb.getCollection("TasksData");
+        Document queryFilter = new Document().append("userID", MainActivity.monUser.getId());
+        RealmResultTask<MongoCursor<Document>> findTask = mongoCollection.find(queryFilter).iterator();
+        findTask.getAsync(new App.Callback<MongoCursor<Document>>() {
+            @Override
+            public void onResult(App.Result<MongoCursor<Document>> result) {
+                if (result.isSuccess()) {
+                    MongoCursor<Document> results = result.get();
+                    while (results.hasNext()) {
+                        Document currentDoc = results.next();
+                        String json = currentDoc.toJson().toString();
+                        Gson gson = new Gson();
+                        Task newTask = gson.fromJson(json, Task.class);
+                      //  Log.d(TAG, "getDataFromdb  json : " + json);
+                      //  Log.d(TAG, "getDataFromdb task: " + newTask.getTitle());
+                        MainActivity.thread.beginTransaction();
+                        MainActivity.thread.copyToRealmOrUpdate(newTask);
+                        MainActivity.thread.commitTransaction();
 
 
+                    }
+                   // sem.release();
+                }
 
-
+            }
+        });
     }
 
 
-
-
 }
-

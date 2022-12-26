@@ -2,89 +2,162 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:background="@drawable/background_add_item"
+    android:onClick="SetReminder"
+    android:textAlignment="center"
     tools:context=".AddNewTaskActivity">
-
 
     <EditText
         android:id="@+id/TaskNameTxt"
-        android:layout_width="317dp"
-        android:layout_height="65dp"
-        android:layout_marginTop="62dp"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:layout_marginStart="5dp"
+
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="344dp"
         android:backgroundTint="#FDFDFD"
         android:ems="10"
-
         android:inputType="textPersonName"
         android:singleLine="false"
-        android:text="TaskName"
+        android:text="My Task"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
         android:textColorLink="#FFFDFD"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.009" />
+        app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintHorizontal_bias="0.289"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.167" />
 
     <EditText
         android:id="@+id/NoteTxt"
         android:layout_width="329dp"
         android:layout_height="61dp"
-        android:layout_marginTop="62dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="59dp"
         android:backgroundTint="#FDFDFD"
         android:ems="10"
+        android:hint="Note Description"
+
         android:singleLine="false"
-        android:text="Note"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
         android:textColorLink="#FFFDFD"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton"
+        app:layout_constraintEnd_toEndOf="@+id/voiceBtn"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.138" />
+        app:layout_constraintStart_toStartOf="@+id/TaskNameTxt"
+        app:layout_constraintTop_toBottomOf="@+id/TaskNameTxt"
+        app:layout_constraintVertical_bias="0.065" />
 
     <ImageButton
         android:id="@+id/voiceBtn"
-        android:layout_width="74dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="72dp"
+        android:layout_width="61dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="13dp"
+
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="10dp"
         android:background="#00FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.954"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_mic"
+        app:layout_constraintBottom_toTopOf="@+id/NoteTxt"
+        app:layout_constraintEnd_toEndOf="@+id/TaskNameTxt"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/TaskNameTxt"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.467"
+        app:srcCompat="@drawable/ic_baseline_mic" />
 
-        />
-
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/addItemBtnToDb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#00502A2A"
-        android:backgroundTint="#000000"
+        android:layout_width="130dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="224dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="30dp"
 
-        android:text="AddIItem"
+
+        android:background="@drawable/bkgroundforaddtaskbtn"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="Add Item"
+        android:textAlignment="center"
+
+        android:textColor="#FFFFFF"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.935"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/addItemBtnToDb2"
+        android:layout_width="69dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="224dp"
+        android:layout_marginBottom="30dp"
+
+
+        android:background="@drawable/bkgroundforaddtaskbtn"
+        android:backgroundTint="@color/Secondary_dark"
+        android:gravity="center_horizontal|center_vertical"
+        android:onClick="close"
+
+        android:text="X"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/addItemBtnToDb"
+        app:layout_constraintHorizontal_bias="0.24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button"
+        android:layout_width="249dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/backgroudforbuttonstransparentwzborder"
+        android:drawableStart="@drawable/ic_baseline_add_alarm"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="Set Reminder"
+
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/NoteTxt"
+        app:layout_constraintHorizontal_bias="0.537"
+        app:layout_constraintStart_toStartOf="@+id/NoteTxt"
+        app:layout_constraintTop_toBottomOf="@+id/NoteTxt"
+        app:layout_constraintVertical_bias="0.096"
+        app:strokeColor="@color/white"
+        app:strokeWidth="2dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="329dp"
+        android:layout_height="47dp"
+
+        android:text="Add a new task"
+        android:textAlignment="viewStart"
+        android:textAllCaps="false"
+        android:textColor="@color/dark"
+        android:textSize="34sp"
+        android:textStyle="bold"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.341"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.355" />
+        app:layout_constraintVertical_bias="0.045" />
 
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="190dp"
-        android:layout_height="64dp"
-        android:layout_marginTop="88dp"
-        android:background="@color/Secondary_dark"
-        android:text="Set Reminder"
-        android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="@+id/addItemBtnToDb"
-        app:layout_constraintStart_toStartOf="@+id/addItemBtnToDb"
-        app:layout_constraintTop_toBottomOf="@+id/addItemBtnToDb" />
 </androidx.constraintlayout.widget.ConstraintLayout>

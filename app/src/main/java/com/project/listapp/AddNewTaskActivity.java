@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.Gson;
+
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -71,9 +73,14 @@ public class AddNewTaskActivity extends AppCompatActivity {
 
                 //getting task details
                 nTask=new Task();
+                nTask.setUserID(mUser.getId());
                 nTask.set_id(new ObjectId());
                 nTask.setTitle(title);
                 nTask.setDescription(note);
+                nTask.setFinished(false);
+                nTask.setDateCreated(LocalDate.now().toString());
+                nTask.setLastUpdatedDate(LocalDate.now().toString());
+                nTask.setPriority(0);
 
                 //adding to local databse
                 MainActivity.thread.beginTransaction();
@@ -82,12 +89,15 @@ public class AddNewTaskActivity extends AppCompatActivity {
 
                 Toast.makeText(AddNewTaskActivity.this, "item inserted", Toast.LENGTH_SHORT).show();
 
-                    MongoClient monClient= mUser.getMongoClient("mongodb-atlas");
-                    MongoDatabase monDb= monClient.getDatabase("ToDoListApp");
-                    MongoCollection<Document> mongoCollection=monDb.getCollection("Tasks");
 
-                    LocalDate f= LocalDate.now();
-                    mongoCollection.insertOne(new Document("userID",mUser.getId()).append("note",title).append("date created",f.toString())).getAsync(result -> {
+                MongoClient monClient= mUser.getMongoClient("mongodb-atlas");
+                MongoDatabase monDb= monClient.getDatabase("ToDoListApp");
+                MongoCollection<Document> mongoCollection=monDb.getCollection("TasksData");
+//Tasks
+                Gson g=new Gson();
+                String json=g.toJson(nTask);
+                //new Document("userID",mUser.getId()).append("note",title).append("date created",f.toString())
+                    mongoCollection.insertOne(Document.parse(json)).getAsync(result -> {
                         if (result.isSuccess())
                         {
                             Log.d(TAG, "onClick: data inserted successfully");
@@ -183,6 +193,16 @@ void syncv() {
     });
 */
 
-}}
+}
+
+    public void SetReminder(View view) {
+    }
+
+    public void close(View view) {
+
+        Intent backIntent=new Intent(this,homeActivity.class);
+        startActivity(backIntent);
+    }
+}
 
 

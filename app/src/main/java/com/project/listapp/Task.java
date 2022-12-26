@@ -9,23 +9,36 @@ import io.realm.annotations.PrimaryKey;
 public class Task   extends RealmObject {
 
 
-
     @PrimaryKey
     private ObjectId _id;
+    private String userID;
     private String title;
     private String description;
     private String lastUpdatedDate;
+    private String dateCreated;
     private int priority;
     private boolean finished;
-    // RealmObject subclasses must provide an empty constructor
-    public Task() {
-    }
+
+
     public ObjectId get_id() {
         return _id;
     }
 
     public void set_id(ObjectId _id) {
         this._id = _id;
+    }
+
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    // RealmObject subclasses must provide an empty constructor
+    public Task() {
     }
 
     public Task(String title, String description, String lastUpdatedDate, int priority, boolean finished) {
@@ -79,4 +92,13 @@ public class Task   extends RealmObject {
     public void setFinished(boolean finished) {
         this.finished = finished;
     }
+    public String getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(String dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+
 }

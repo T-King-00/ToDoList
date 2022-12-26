@@ -2,15 +2,22 @@ package com.project.listapp;
 
 import static com.project.listapp.User.AuthenticateUser;
 
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
 
 import java.sql.SQLException;
 
@@ -26,12 +33,12 @@ public class MainActivity extends AppCompatActivity {
     //real m vp variables
     static String appid="application-1-itwtp";
     private static final String TAG = "MainActivity";
-    String realmName = "Application-1";
+    String realmName = "Application-5";
     static Realm thread;
     static io.realm.mongodb.User monUser ;
     static com.project.listapp.User mUser;
     static App app;
-
+    static  CodecRegistry pojoCodecRegistry;
     //activity variables:
     private EditText emailTxt;
     private EditText passTxt;
@@ -45,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loginscreen_act);
         startUpRealM();
-
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         emailTxt = (EditText) findViewById(R.id.EmailAddressTxt);
         passTxt = (EditText) findViewById(R.id.passwordTxt);
@@ -68,10 +76,13 @@ public class MainActivity extends AppCompatActivity {
     public void startUpRealM(){
         Realm.init(this); // context, usually an Activity or Application( initailized once only )
 
+        final RealmConfiguration configuration = new RealmConfiguration.Builder().name(realmName).schemaVersion(3).migration(new RealmMigrations()).build();
 
         app=new App(new AppConfiguration.Builder(appid).build());
         RealmConfiguration config = new RealmConfiguration.Builder().name(realmName).build();
-        thread = Realm.getInstance(config);
+        thread = Realm.getInstance(configuration);
+        pojoCodecRegistry= fromRegistries(AppConfiguration.DEFAULT_BSON_CODEC_REGISTRY,
+                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
        /* performing read and write operations on the UI thread can lead to unresponsive or slow UI interactions,
         so it's usually best to handle these operations either asynchronously or in a background thread.*/
@@ -122,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(newIntent);
 
     }
-
 
 
 
