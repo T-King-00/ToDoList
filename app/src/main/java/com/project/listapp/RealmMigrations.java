@@ -18,4 +18,16 @@ public class RealmMigrations implements RealmMigration {
             }
         }
 
+    public int hashCode() {
+        return RealmMigrations.class.hashCode();
+    }
+
+    public boolean equals(Object object) {
+        if(object == null) {
+            return false;
+        }
+        return object instanceof RealmMigrations;
+    }
+
+
 }

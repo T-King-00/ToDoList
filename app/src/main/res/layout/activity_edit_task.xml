@@ -7,12 +7,35 @@
     android:background="@drawable/background_add_item"
     android:onClick="SetReminder"
     android:textAlignment="center"
-    tools:context=".AddNewTaskActivity">
+    tools:context=".EditExistingTaskActivity">
+
+    <EditText
+        android:id="@+id/priorityTxt"
+        android:layout_width="101dp"
+        android:layout_height="62dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="59dp"
+        android:backgroundTint="#FDFDFD"
+        android:ems="10"
+        android:hint="Priority"
+        android:inputType="number"
+
+        android:singleLine="false"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textColorLink="#FFFDFD"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/voiceBtn"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/TaskNameTxt"
+        app:layout_constraintTop_toBottomOf="@+id/TaskNameTxt"
+        app:layout_constraintVertical_bias="0.171" />
 
     <EditText
         android:id="@+id/TaskNameTxt"
-        android:layout_width="match_parent"
-        android:layout_height="66dp"
+        android:layout_width="370dp"
+        android:layout_height="69dp"
         android:layout_marginStart="5dp"
 
         android:layout_marginEnd="5dp"
@@ -21,7 +44,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:singleLine="false"
-        android:text="My Task"
+        android:hint="Task Title "
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
         android:textColorLink="#FFFDFD"
@@ -49,33 +72,10 @@
         android:textColorLink="#FFFDFD"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/voiceBtn"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.135"
         app:layout_constraintStart_toStartOf="@+id/TaskNameTxt"
         app:layout_constraintTop_toBottomOf="@+id/TaskNameTxt"
-        app:layout_constraintVertical_bias="0.004" />
-
-    <EditText
-        android:id="@+id/priorityTxt"
-        android:layout_width="329dp"
-        android:layout_height="61dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="59dp"
-        android:backgroundTint="#FDFDFD"
-        android:ems="10"
-        android:inputType="number"
-        android:hint="Priority"
-
-        android:singleLine="false"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        android:textColorLink="#FFFDFD"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/voiceBtn"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/TaskNameTxt"
-        app:layout_constraintTop_toBottomOf="@+id/TaskNameTxt"
-        app:layout_constraintVertical_bias="0.172" />
+        app:layout_constraintVertical_bias="0.021" />
 
     <ImageButton
         android:id="@+id/voiceBtn"
@@ -84,29 +84,55 @@
         android:layout_marginTop="13dp"
 
         android:layout_marginEnd="24dp"
+        android:layout_marginBottom="10dp"
         android:background="#00FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/NoteTxt"
         app:layout_constraintEnd_toEndOf="@+id/TaskNameTxt"
-        app:layout_constraintHorizontal_bias="0.993"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/TaskNameTxt"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.062"
+        app:layout_constraintVertical_bias="0.61"
         app:srcCompat="@drawable/ic_baseline_mic" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/addItemBtnToDb"
+        android:id="@+id/editItemBtn"
         android:layout_width="130dp"
         android:layout_height="55dp"
-        android:layout_marginTop="224dp"
+        android:layout_marginTop="160dp"
         android:layout_marginEnd="30dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="10dp"
 
-
-        android:background="@drawable/bkgroundforaddtaskbtn"
+        android:background="@drawable/backgroudforbuttons"
         android:gravity="center_horizontal|center_vertical"
-        android:text="Add Item"
-        android:textAlignment="center"
+        android:onClick="updateItem"
+        android:text="Edit"
 
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/DeleteBtn"
+        app:layout_constraintEnd_toEndOf="@+id/DeleteBtn"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/DeleteBtn"
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/DeleteBtn"
+        android:layout_width="130dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="160dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/backgroudforbuttons"
+
+
+        android:backgroundTint="#780404"
+        android:gravity="center_horizontal|center_vertical"
+        android:onClick="DeleteItem"
+        android:text="Delete"
+
+        android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -120,23 +146,22 @@
         android:id="@+id/closeBtn"
         android:layout_width="69dp"
         android:layout_height="54dp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="224dp"
-
-
         android:layout_marginBottom="30dp"
+
+
         android:background="@drawable/bkgroundforaddtaskbtn"
         android:backgroundTint="@color/Secondary_dark"
         android:gravity="center_horizontal|center_vertical"
-
         android:onClick="close"
+
         android:text="X"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/addItemBtnToDb"
-        app:layout_constraintHorizontal_bias="0.114"
+        app:layout_constraintEnd_toStartOf="@+id/editItemBtn"
+        app:layout_constraintHorizontal_bias="0.24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button"
         app:layout_constraintVertical_bias="1.0" />
@@ -160,7 +185,7 @@
         app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="@+id/NoteTxt"
         app:layout_constraintTop_toBottomOf="@+id/NoteTxt"
-        app:layout_constraintVertical_bias="0.201"
+        app:layout_constraintVertical_bias="0.152"
         app:strokeColor="@color/white"
         app:strokeWidth="2dp" />
 
@@ -169,7 +194,7 @@
         android:layout_width="329dp"
         android:layout_height="47dp"
 
-        android:text="Add a new task"
+        android:text="Edit existing task"
         android:textAlignment="viewStart"
         android:textAllCaps="false"
         android:textColor="@color/dark"

@@ -1,8 +1,11 @@
 package com.project.listapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -12,10 +15,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 public class homeActivity extends AppCompatActivity {
-
+    private static final String TAG = "homeActivity";
 
     TabLayout tabLayout;
     ViewPager2 viewPager;
+
     FloatingActionButton addNewItemBtn;
 
     @Override
@@ -26,12 +30,26 @@ public class homeActivity extends AppCompatActivity {
         tabLayout=findViewById(R.id.tabs);
         viewPager=findViewById(R.id.viewPagerLayout);
 
+
+        SharedPreferences settings = getSharedPreferences("MyPrefs", 0);
+        if (settings.getBoolean("is_first_time", true)) {
+            //the app is being launched for first time, do something
+            Toast.makeText(this, "first time", Toast.LENGTH_SHORT).show();
+            // first time task
+            // record the fact that the app has been started at least once
+            TodayItems.isfirsttime=true;
+
+            settings.edit().putBoolean("is_first_time", false).commit();
+        }
+        else
+        {
+            TodayItems.isfirsttime=false;
+            Toast.makeText(this, "second time", Toast.LENGTH_SHORT).show();
+        }
         FragmentManager fragmentManager= getSupportFragmentManager();
-
         VPadapter  vPadapter=new VPadapter(fragmentManager,getLifecycle());
+        //as list view we set adaptor for it .
         viewPager.setAdapter(vPadapter);
-
-
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -72,6 +90,10 @@ public class homeActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+
         super.onResume();
+
     }
+
+
 }

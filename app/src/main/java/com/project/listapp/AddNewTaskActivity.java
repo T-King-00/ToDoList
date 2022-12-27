@@ -15,39 +15,23 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.gson.Gson;
-
-import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import io.realm.OrderedCollectionChangeSet;
-import io.realm.OrderedRealmCollectionChangeListener;
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
-import io.realm.mongodb.App;
-import io.realm.mongodb.AppConfiguration;
 import io.realm.mongodb.User;
-import io.realm.mongodb.mongo.MongoClient;
-import io.realm.mongodb.mongo.MongoCollection;
-import io.realm.mongodb.mongo.MongoDatabase;
-import io.realm.mongodb.sync.ClientResetRequiredError;
-import io.realm.mongodb.sync.DiscardUnsyncedChangesStrategy;
-import io.realm.mongodb.sync.SyncConfiguration;
-import io.realm.mongodb.sync.SyncSession;
 
 
 public class AddNewTaskActivity extends AppCompatActivity {
 
 
-    Button btn;
+    Button addBtn;
     ImageButton voiceBtn;
     EditText TaskTitleTxt;
     EditText NoteTxt;
+    EditText priorityText;
     private final int REQ_CODE=100;
     static User mUser;
     Task nTask;
@@ -55,17 +39,17 @@ public class AddNewTaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_task);
-        btn=(Button) findViewById(R.id.addItemBtnToDb);
+        addBtn =(Button) findViewById(R.id.addItemBtnToDb);
+        priorityText = (EditText) findViewById(R.id.priorityTxt);
         voiceBtn=(ImageButton) findViewById(R.id.voiceBtn);
         TaskTitleTxt=(EditText)findViewById(R.id.TaskNameTxt);
         NoteTxt=(EditText)findViewById(R.id.NoteTxt);
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //adding to local dataabase
                 Log.d(TAG, "onClick: Attemting to add to db");
-
-
                 if (!TaskTitleTxt.getText().toString().equals(""))
                 {
                 String title=TaskTitleTxt.getText().toString();
@@ -73,8 +57,8 @@ public class AddNewTaskActivity extends AppCompatActivity {
 
                 //getting task details
                 nTask=new Task();
-                nTask.setUserID(mUser.getId());
-                nTask.set_id(new ObjectId());
+                nTask.setUserID(MainActivity.monUser.getId());
+                nTask.set_id(new ObjectId().toString());
                 nTask.setTitle(title);
                 nTask.setDescription(note);
                 nTask.setFinished(false);
@@ -86,26 +70,9 @@ public class AddNewTaskActivity extends AppCompatActivity {
                 MainActivity.thread.beginTransaction();
                 MainActivity.thread.copyToRealmOrUpdate(nTask);
                 MainActivity.thread.commitTransaction();
+                MainActivity.thread.close();
 
                 Toast.makeText(AddNewTaskActivity.this, "item inserted", Toast.LENGTH_SHORT).show();
-
-
-                MongoClient monClient= mUser.getMongoClient("mongodb-atlas");
-                MongoDatabase monDb= monClient.getDatabase("ToDoListApp");
-                MongoCollection<Document> mongoCollection=monDb.getCollection("TasksData");
-//Tasks
-                Gson g=new Gson();
-                String json=g.toJson(nTask);
-                //new Document("userID",mUser.getId()).append("note",title).append("date created",f.toString())
-                    mongoCollection.insertOne(Document.parse(json)).getAsync(result -> {
-                        if (result.isSuccess())
-                        {
-                            Log.d(TAG, "onClick: data inserted successfully");
-                            Toast.makeText(AddNewTaskActivity.this, "add new item db", Toast.LENGTH_LONG).show();
-                        }else
-                            Log.d(TAG, "onClick: data  "+result.getError().toString());
-                    });
-
 
 
                 }
@@ -130,6 +97,7 @@ public class AddNewTaskActivity extends AppCompatActivity {
 
     }
 
+
     @Override
     protected void onActivityResult(int requestCode , int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -148,60 +116,20 @@ public class AddNewTaskActivity extends AppCompatActivity {
         }
     }
 
-void syncv() {
-
-    // all Tasks in the realm
-
-  /*  MainActivity.app= new App(new AppConfiguration.Builder(MainActivity.appid)
-            .defaultSyncClientResetStrategy(new DiscardUnsyncedChangesStrategy() {
-                @Override
-                public void onBeforeReset(Realm realm) {
-                    Log.w("EXAMPLE", "Beginning client reset for " + realm.getPath());
-                }
-                @Override
-                public void onAfterReset(Realm before, Realm after) {
-                    Log.w("EXAMPLE", "Finished client reset for " + before.getPath());
-                }
-                @Override
-                public void onError(SyncSession session, ClientResetRequiredError error) {
-                    Log.e("EXAMPLE", "Couldn't handle the client reset automatically." +
-                            " Falling back to manual recovery: " + error.getErrorMessage());
-
-                }
-            })
-            .build());
-
-
-    RealmResults<Task> Tasks = MainActivity.thread.where(Task.class).findAllAsync();
-    Tasks.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<Task>>() {
-        @Override
-        public void onChange(RealmResults<Task> collection, OrderedCollectionChangeSet changeSet) {
-            // process deletions in reverse order if maintaining parallel data structures so indices don't change as you iterate
-            OrderedCollectionChangeSet.Range[] deletions = changeSet.getDeletionRanges();
-            for (OrderedCollectionChangeSet.Range range : deletions) {
-                Log.d("QUICKSTART", "Deleted range: " + range.startIndex + " to " + (range.startIndex + range.length - 1));
-            }
-            OrderedCollectionChangeSet.Range[] insertions = changeSet.getInsertionRanges();
-            for (OrderedCollectionChangeSet.Range range : insertions) {
-                Log.d("QUICKSTART", "Inserted range: " + range.startIndex + " to " + (range.startIndex + range.length - 1));
-            }
-            OrderedCollectionChangeSet.Range[] modifications = changeSet.getChangeRanges();
-            for (OrderedCollectionChangeSet.Range range : modifications) {
-                Log.d("QUICKSTART", "Updated range: " + range.startIndex + " to " + (range.startIndex + range.length - 1));
-            }
-        }
-    });
-*/
-
-}
-
     public void SetReminder(View view) {
+
     }
 
     public void close(View view) {
-
+        dataInCloud.insertOne(nTask);
         Intent backIntent=new Intent(this,homeActivity.class);
         startActivity(backIntent);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
     }
 }
 

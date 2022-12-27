@@ -10,7 +10,7 @@ public class Task   extends RealmObject {
 
 
     @PrimaryKey
-    private ObjectId _id;
+    private String _id;
     private String userID;
     private String title;
     private String description;
@@ -20,11 +20,11 @@ public class Task   extends RealmObject {
     private boolean finished;
 
 
-    public ObjectId get_id() {
+    public String get_id() {
         return _id;
     }
 
-    public void set_id(ObjectId _id) {
+    public void set_id(String _id) {
         this._id = _id;
     }
 

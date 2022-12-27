@@ -8,16 +8,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 public class VPadapter extends FragmentStateAdapter {
 
-
-
     public VPadapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
     }
-    public int getCount() {
-        return 3;
-    }
-
-
 
     @NonNull
     @Override
@@ -27,6 +20,7 @@ public class VPadapter extends FragmentStateAdapter {
             case 0:
                 return new TodayItems();
             case 1:
+                return new tomorrowItems();
             case 2:
                 return new tomorrowItems();
         }
@@ -36,7 +30,7 @@ public class VPadapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return getCount();
+        return 3;
     }
 
 }

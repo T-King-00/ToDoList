@@ -7,7 +7,9 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -33,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
     //real m vp variables
     static String appid="application-1-itwtp";
     private static final String TAG = "MainActivity";
-    String realmName = "Application-5";
+    static String realmName = "Application-5";
+    static  String collectionName = "Tasks";
     static Realm thread;
     static io.realm.mongodb.User monUser ;
     static com.project.listapp.User mUser;
@@ -72,24 +75,23 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+    static RealmConfiguration configuration=null;
     public void startUpRealM(){
         Realm.init(this); // context, usually an Activity or Application( initailized once only )
 
-        final RealmConfiguration configuration = new RealmConfiguration.Builder().name(realmName).schemaVersion(3).migration(new RealmMigrations()).build();
+        configuration = new RealmConfiguration.Builder()
+                .name(realmName).schemaVersion(5).migration(new RealmMigrations()).build();
 
+        Realm.setDefaultConfiguration(configuration);
         app=new App(new AppConfiguration.Builder(appid).build());
-        RealmConfiguration config = new RealmConfiguration.Builder().name(realmName).build();
         thread = Realm.getInstance(configuration);
+
+
         pojoCodecRegistry= fromRegistries(AppConfiguration.DEFAULT_BSON_CODEC_REGISTRY,
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
        /* performing read and write operations on the UI thread can lead to unresponsive or slow UI interactions,
         so it's usually best to handle these operations either asynchronously or in a background thread.*/
-
-
-
-
 
 
 
@@ -107,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 AuthenticateUser(getApplicationContext(),mUser);
                 Log.d(TAG, "logIn: "+app.currentUser());
+
                 monUser=app.currentUser();
 
                 /*SyncConfiguration config1 = new SyncConfiguration.Builder(monUser)
@@ -135,5 +138,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public static void init(Context x){
+        Realm.init(x);
+        app=new App(new AppConfiguration.Builder(appid).build());
+        MainActivity.thread=Realm.getDefaultInstance();
+        MainActivity.monUser=app.currentUser();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: destroyed");
+    }
 }

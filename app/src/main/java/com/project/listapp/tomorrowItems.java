@@ -47,7 +47,7 @@ public class tomorrowItems extends Fragment {
         super.onResume();
 
 
-        arrayAdapter.clear();
+       /* arrayAdapter.clear();
         MainActivity.thread.beginTransaction();
 
         RealmResults<Task> Tasks = MainActivity.thread.where(Task.class).findAll();
@@ -60,7 +60,7 @@ public class tomorrowItems extends Fragment {
 
         MainActivity.thread.commitTransaction();
         arrayAdapter.notifyDataSetChanged();
-
+*/
 
     }
 }
