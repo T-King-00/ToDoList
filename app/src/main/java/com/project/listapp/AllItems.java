@@ -1,16 +1,11 @@
 package com.project.listapp;
 
-import static android.content.ContentValues.TAG;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.icu.text.DateFormat;
-import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,51 +18,34 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import org.bson.Document;
-import org.bson.codecs.configuration.CodecRegistry;
-import org.bson.codecs.pojo.PojoCodecProvider;
 
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.mongodb.App;
-import io.realm.mongodb.AppConfiguration;
 import io.realm.mongodb.RealmResultTask;
-import io.realm.mongodb.User;
 import io.realm.mongodb.mongo.MongoClient;
 import io.realm.mongodb.mongo.MongoCollection;
 import io.realm.mongodb.mongo.MongoDatabase;
-import io.realm.mongodb.mongo.iterable.FindIterable;
 import io.realm.mongodb.mongo.iterable.MongoCursor;
-import io.realm.mongodb.sync.MutableSubscriptionSet;
-import io.realm.mongodb.sync.Subscription;
-import io.realm.mongodb.sync.SyncConfiguration;
 
 
-public class tomorrowItems extends Fragment implements SelectListener{
+public class AllItems extends Fragment implements SelectListener{
 
-    public static final  String TAG="TomorrowItems";
+    public static final  String TAG="TodayItems";
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adpt;
     static ArrayList<Task> list;
-
+    Semaphore sem=new Semaphore(0);
     static boolean isfirsttime=true;
-    String formattedDate;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        LocalDate today = LocalDate.now().plusDays(1);
 
-        formattedDate=today.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_today_items, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.listVItemsLayout);
@@ -78,9 +56,7 @@ public class tomorrowItems extends Fragment implements SelectListener{
                 MongoClient monClient = MainActivity.monUser.getMongoClient("mongodb-atlas");
                 MongoDatabase monDb = monClient.getDatabase("ToDoListApp");
                 MongoCollection<Document> mongoCollection = monDb.getCollection(MainActivity.collectionName);
-
-
-                Document queryFilter = new Document().append("userID", MainActivity.monUser.getId()).append("dueDate",formattedDate);
+                Document queryFilter = new Document().append("userID", MainActivity.monUser.getId());
                 RealmResultTask<MongoCursor<Document>> findTask = mongoCollection.find(queryFilter).iterator();
                 //add it to local database
                 findTask.getAsync(new App.Callback<MongoCursor<Document>>() {
@@ -135,7 +111,8 @@ public class tomorrowItems extends Fragment implements SelectListener{
         MainActivity.thread=Realm.getDefaultInstance();
         MainActivity.thread.beginTransaction();
         RealmResults<Task> Tasks = MainActivity.thread.where(Task.class).findAll();
-        long counter = MainActivity.thread.where(Task.class).equalTo("dueDate",formattedDate).findAll().stream().count();
+
+        long counter = MainActivity.thread.where(Task.class).findAll().stream().count();
         Log.d(TAG, "onResume: +"+counter);
         if (counter!=0) {
             for (int i = 0; i < counter; i++) {

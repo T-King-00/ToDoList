@@ -3,7 +3,6 @@ package com.project.listapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -26,7 +25,7 @@ public class homeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homepage);
-
+        MainActivity.init(getApplicationContext());
         tabLayout=findViewById(R.id.tabs);
         viewPager=findViewById(R.id.viewPagerLayout);
 
@@ -37,13 +36,13 @@ public class homeActivity extends AppCompatActivity {
             Toast.makeText(this, "first time", Toast.LENGTH_SHORT).show();
             // first time task
             // record the fact that the app has been started at least once
-            TodayItems.isfirsttime=true;
+            AllItems.isfirsttime=true;
 
             settings.edit().putBoolean("is_first_time", false).commit();
         }
         else
         {
-            TodayItems.isfirsttime=false;
+            AllItems.isfirsttime=false;
             Toast.makeText(this, "second time", Toast.LENGTH_SHORT).show();
         }
         FragmentManager fragmentManager= getSupportFragmentManager();

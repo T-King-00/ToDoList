@@ -18,11 +18,11 @@ public class VPadapter extends FragmentStateAdapter {
         switch (position)
         {
             case 0:
-                return new TodayItems();
+                return new AllItems();
             case 1:
                 return new tomorrowItems();
             case 2:
-                return new tomorrowItems();
+                return new FutureTasks();
         }
 
         return null;

@@ -4,6 +4,7 @@ package com.project.listapp;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.bson.Document;
 
@@ -27,13 +28,12 @@ public class dataInCloud {
         //get local data
         ArrayList<Task> listOfTasks=new ArrayList<>();
 
-        MainActivity.thread= Realm.getDefaultInstance();
-        MainActivity.thread.beginTransaction();
-        RealmResults<Task> TasksR = MainActivity.thread.where(Task.class).findAll();
-        long counter = MainActivity.thread.where(Task.class).findAll().stream().count();
+        Realm thread2= Realm.getDefaultInstance();
+        thread2.beginTransaction();
+        RealmResults<Task> TasksR = thread2.where(Task.class).findAll();
+        long counter =thread2.where(Task.class).findAll().stream().count();
         Log.d(TAG, "onResume: +"+counter);
-        MainActivity.thread.commitTransaction();
-        MainActivity.thread.close();
+
 
         ///sync with cloud
 
@@ -45,8 +45,8 @@ public class dataInCloud {
         //deletes data
 
         Document queryFilter = new Document().append("userID", MainActivity.monUser.getId());
-
-        mongoCollection.deleteMany(queryFilter).getAsync(new App.Callback<DeleteResult>() {
+        mongoCollection.deleteMany(queryFilter).get().getDeletedCount();
+     /*   mongoCollection.deleteMany(queryFilter).getAsync(new App.Callback<DeleteResult>() {
             @Override
             public void onResult(App.Result<DeleteResult> result) {
                 if(result.isSuccess())
@@ -54,7 +54,7 @@ public class dataInCloud {
                 else
                     Log.e(TAG, "DeleteItem: deleeeteeed nottt from dbbbb 4 :21");
             }
-        });
+        });*/
 
         if (counter!=0) {
             for (int i = 0; i < counter; i++) {
@@ -64,6 +64,8 @@ public class dataInCloud {
         for (Task i : listOfTasks) {
            insertOne(i);
         }
+        thread2.commitTransaction();
+        thread2.close();
     }
     public static void delete(Task nTask){
         //cloud database
@@ -88,6 +90,7 @@ public class dataInCloud {
             Log.d(TAG, "DeleteItem: "+e.getMessage());
         }
     }
+    static Gson g= new GsonBuilder().setPrettyPrinting().create();
     public static void insertOne(Task nTask){
         //cloud database
         MongoClient monClient;
@@ -97,9 +100,10 @@ public class dataInCloud {
              monClient= MainActivity.monUser.getMongoClient("mongodb-atlas");
              monDb= monClient.getDatabase("ToDoListApp");
              mongoCollection=monDb.getCollection(MainActivity.collectionName);
-            Gson g=new Gson();
-            String json=g.toJson(nTask);
-            mongoCollection.insertOne(Document.parse(json)).getAsync(result -> {
+
+            String json=(g.toJson(nTask));
+
+           mongoCollection.insertOne(Document.parse(json)).getAsync(result -> {
                 if (result.isSuccess())
                 {
                     Log.d(TAG, "onClick: data inserted successfully");
@@ -120,7 +124,6 @@ public class dataInCloud {
             monClient = MainActivity.monUser.getMongoClient("mongodb-atlas");
             monDb = monClient.getDatabase("ToDoListApp");
             mongoCollection = monDb.getCollection(MainActivity.collectionName);
-
             Document queryfilter = new Document().append("_id", mTask.get_id());
             RealmResultTask<MongoCursor<Document>> findTask = mongoCollection.find(queryfilter).iterator();
             findTask.getAsync(result -> {

@@ -63,8 +63,8 @@
         android:layout_marginEnd="59dp"
         android:backgroundTint="#FDFDFD"
         android:ems="10"
-        android:inputType="number"
         android:hint="Priority"
+        android:inputType="number"
 
         android:singleLine="false"
         android:textColor="#FFFFFF"
@@ -160,7 +160,7 @@
         app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="@+id/NoteTxt"
         app:layout_constraintTop_toBottomOf="@+id/NoteTxt"
-        app:layout_constraintVertical_bias="0.201"
+        app:layout_constraintVertical_bias="0.371"
         app:strokeColor="@color/white"
         app:strokeWidth="2dp" />
 
@@ -182,5 +182,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.045" />
+
+    <EditText
+        android:id="@+id/editTextDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="81dp"
+        android:ems="10"
+        android:hint="DueDate"
+        android:inputType="date"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="@+id/priorityTxt"
+        app:layout_constraintStart_toStartOf="@+id/priorityTxt"
+        app:layout_constraintTop_toTopOf="@+id/priorityTxt" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

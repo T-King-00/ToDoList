@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         Realm.init(this); // context, usually an Activity or Application( initailized once only )
 
         configuration = new RealmConfiguration.Builder()
-                .name(realmName).schemaVersion(5).migration(new RealmMigrations()).build();
+                .name(realmName).schemaVersion(7).migration(new RealmMigrations()).build();
 
         Realm.setDefaultConfiguration(configuration);
         app=new App(new AppConfiguration.Builder(appid).build());
@@ -139,10 +139,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     public static void init(Context x){
-        Realm.init(x);
-        app=new App(new AppConfiguration.Builder(appid).build());
-        MainActivity.thread=Realm.getDefaultInstance();
-        MainActivity.monUser=app.currentUser();
+
+
+        if (Realm.getDefaultInstance()==null)
+        {
+            Realm.init(x);
+            app=new App(new AppConfiguration.Builder(appid).build());
+            MainActivity.thread=Realm.getDefaultInstance();
+            MainActivity.monUser=app.currentUser();
+        }
+
 
     }
 
@@ -151,4 +157,5 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         Log.d(TAG, "onDestroy: destroyed");
     }
+
 }

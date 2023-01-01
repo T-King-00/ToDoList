@@ -13,7 +13,7 @@ public class ExampleUnitTest {
 
     @Test
     public void homeitems() {
-        TodayItems n=new TodayItems();
+        AllItems n=new AllItems();
         assertEquals(1,n.adpt.getItemCount());
     }
 

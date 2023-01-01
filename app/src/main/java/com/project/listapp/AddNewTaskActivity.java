@@ -32,6 +32,7 @@ public class AddNewTaskActivity extends AppCompatActivity {
     EditText TaskTitleTxt;
     EditText NoteTxt;
     EditText priorityText;
+    EditText editTextDate;
     private final int REQ_CODE=100;
     static User mUser;
     Task nTask;
@@ -43,6 +44,7 @@ public class AddNewTaskActivity extends AppCompatActivity {
         priorityText = (EditText) findViewById(R.id.priorityTxt);
         voiceBtn=(ImageButton) findViewById(R.id.voiceBtn);
         TaskTitleTxt=(EditText)findViewById(R.id.TaskNameTxt);
+        editTextDate=(EditText)findViewById(R.id.editTextDate);
         NoteTxt=(EditText)findViewById(R.id.NoteTxt);
 
         addBtn.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +66,7 @@ public class AddNewTaskActivity extends AppCompatActivity {
                 nTask.setFinished(false);
                 nTask.setDateCreated(LocalDate.now().toString());
                 nTask.setLastUpdatedDate(LocalDate.now().toString());
+                nTask.setDueDate(editTextDate.getText().toString());
                 nTask.setPriority(0);
 
                 //adding to local databse

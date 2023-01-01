@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
 }
-apply plugin: "realm-android"
+
 android {
     namespace 'com.project.listapp'
     compileSdk 32
@@ -27,7 +27,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-
+apply plugin: "realm-android"
 realm {
     syncEnabled = true
 }

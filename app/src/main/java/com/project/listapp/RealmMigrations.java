@@ -15,6 +15,7 @@ public class RealmMigrations implements RealmMigration {
                 final RealmObjectSchema userSchema = schema.get("Tasks");
                 userSchema.addField("userID", String.class);
                 userSchema.addField("dateCreated", String.class);
+                userSchema.addField("dueDate", String.class);
             }
         }
 

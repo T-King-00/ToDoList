@@ -16,9 +16,17 @@ public class Task   extends RealmObject {
     private String description;
     private String lastUpdatedDate;
     private String dateCreated;
+    private String dueDate;
     private int priority;
     private boolean finished;
 
+    public String getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(String dueDate) {
+        this.dueDate = dueDate;
+    }
 
     public String get_id() {
         return _id;
@@ -27,7 +35,6 @@ public class Task   extends RealmObject {
     public void set_id(String _id) {
         this._id = _id;
     }
-
 
     public String getUserID() {
         return userID;
